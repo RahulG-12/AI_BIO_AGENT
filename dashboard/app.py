@@ -1,7 +1,7 @@
 """
 dashboard/app.py
 
-Premium Luxury Biotech UI — Immortigen Biological Age Agent
+Premium Luxury Biotech UI — BioAge AI Biological Age Agent
 Top-level 0.01% design · Light theme only
 """
 
@@ -15,7 +15,7 @@ import sys, os
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 st.set_page_config(
-    page_title="Biological Age Agent — Immortigen",
+    page_title="Biological Age Agent — BioAge AI",
     page_icon="🧬",
     layout="wide",
     initial_sidebar_state="expanded",
