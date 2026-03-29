@@ -75,7 +75,7 @@ html, body, [data-testid="stAppViewContainer"] {
 
 /* ── SIDEBAR ── */
 [data-testid="stSidebar"] {
-    background: var(--warm-white) !important;
+    bac0kground: var(--warm-white) !important;
     border-right: 1px solid var(--border) !important;
     box-shadow: 4px 0 24px rgba(13,13,13,0.04) !important;
 }
@@ -549,7 +549,7 @@ if not run:
 @st.cache_resource
 def load_model():
     model = BloodBiomarkerModel()
-    model.load("models/saved")
+    model.load("models/saved/blood_mlp.pt")
     return model
 
 blood_model = load_model()
