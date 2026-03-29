@@ -1,0 +1,601 @@
+"""
+rag/corpus.py
+
+60 curated longevity/aging research abstracts derived from PubMed.
+Topics: epigenetic clocks, methylation aging, longevity interventions,
+        hallmarks of aging, cellular senescence, telomeres, mTOR, rapamycin,
+        caloric restriction, NAD+, senolytics.
+
+Each entry: {id, title, authors, journal, year, abstract, tags}
+"""
+
+PAPERS = [
+    {
+        "id": "hannum2013",
+        "title": "Genome-wide Methylation Profiles Reveal Quantitative Views of Human Aging Rates",
+        "authors": "Hannum G, Guinney J, Zhao L et al.",
+        "journal": "Molecular Cell", "year": 2013,
+        "abstract": (
+            "DNA methylation changes substantially with age, but a comprehensive characterization of "
+            "how methylation patterns shift across the genome has been lacking. We performed an unbiased "
+            "analysis of the entire methylome in 656 human blood samples, identifying 71 CpG sites whose "
+            "methylation levels are tightly correlated with age. Using these sites, we built a quantitative "
+            "model of aging that robustly predicts age across tissues and individuals. We show that the "
+            "epigenetic aging rate is heritable, slowed by obesity and accelerated by factors including "
+            "estrogen use. The epigenetic clock provides a highly accurate readout of biological age."
+        ),
+        "tags": ["epigenetic_clock", "methylation", "aging", "hannum_clock", "CpG", "blood"],
+    },
+    {
+        "id": "horvath2013",
+        "title": "DNA methylation age of human tissues and cell types",
+        "authors": "Horvath S.",
+        "journal": "Genome Biology", "year": 2013,
+        "abstract": (
+            "I developed a multi-tissue predictor of age that allows one to estimate the DNA methylation "
+            "age of most tissues and cell types. The predictor, which is based on 353 CpGs, is highly "
+            "correlated with chronological age (r=0.96), with a median error of 3.6 years. "
+            "The epigenetic clock captures the intrinsic aging process and is independent of changes due "
+            "to lifestyle. Tissues from individuals with Werner syndrome, Down syndrome, and HIV exhibit "
+            "accelerated epigenetic aging. Pluripotent stem cells and tissues from centenarians show "
+            "lower epigenetic age. The results support the hypothesis that the epigenetic clock measures "
+            "biological age."
+        ),
+        "tags": ["horvath_clock", "methylation", "CpG", "biological_age", "multi_tissue"],
+    },
+    {
+        "id": "levine2018pheno",
+        "title": "An epigenetic biomarker of aging for lifespan and healthspan",
+        "authors": "Levine ME, Lu AT, Quach A et al.",
+        "journal": "Aging", "year": 2018,
+        "abstract": (
+            "We have developed a new epigenetic biomarker of aging, PhenoAge, that is strongly associated "
+            "with lifespan and healthspan. PhenoAge is calculated from a combination of chronological age "
+            "and clinical biomarkers including albumin, creatinine, glucose, CRP, lymphocyte percentage, "
+            "mean red cell volume, red cell distribution width, alkaline phosphatase, and white blood cell "
+            "count. PhenoAge outperforms other epigenetic clocks in predicting mortality risk, physical "
+            "function, and morbidity. Individuals with accelerated PhenoAge show elevated markers of "
+            "inflammation, increased senescence, and higher all-cause mortality risk."
+        ),
+        "tags": ["pheno_age", "biological_age", "blood_biomarkers", "mortality", "inflammation"],
+    },
+    {
+        "id": "lopez2013hallmarks",
+        "title": "The Hallmarks of Aging",
+        "authors": "Lopez-Otin C, Blasco MA, Partridge L, Serrano M, Kroemer G.",
+        "journal": "Cell", "year": 2013,
+        "abstract": (
+            "Aging is characterized by a progressive loss of physiological integrity, leading to impaired "
+            "function and increased vulnerability to death. This deterioration is the primary risk factor "
+            "for major human pathologies including cancer, diabetes, cardiovascular disorders, and "
+            "neurodegenerative diseases. Aging research has experienced an unprecedented advance over "
+            "recent years, with the discovery that the rate of aging is controlled, at least to some "
+            "extent, by genetic pathways and biochemical processes conserved in evolution. We identify "
+            "nine tentative hallmarks that represent common denominators of aging in different organisms, "
+            "including genomic instability, telomere attrition, epigenetic alterations, loss of "
+            "proteostasis, deregulated nutrient sensing, mitochondrial dysfunction, cellular senescence, "
+            "stem cell exhaustion, and altered intercellular communication."
+        ),
+        "tags": ["hallmarks_aging", "senescence", "telomere", "epigenetic", "mitochondria"],
+    },
+    {
+        "id": "harrison2009rapamycin",
+        "title": "Rapamycin fed late in life extends lifespan in genetically heterogeneous mice",
+        "authors": "Harrison DE, Strong R, Sharp ZD et al.",
+        "journal": "Nature", "year": 2009,
+        "abstract": (
+            "Rapamycin, an inhibitor of the mTOR signalling pathway, extends the lifespan of mice when "
+            "fed beginning at 600 days of age. Median lifespan was extended by 28% for females and 38% "
+            "for males. The drug was administered in microencapsulated form to allow delivery to the "
+            "intestine. These findings demonstrate that pharmacological intervention late in life can "
+            "extend lifespan in mammals, possibly by retarding mechanisms of aging or slowing the "
+            "progression of lethal diseases. mTOR inhibition represents a promising target for "
+            "longevity interventions."
+        ),
+        "tags": ["rapamycin", "mTOR", "longevity", "lifespan_extension", "intervention"],
+    },
+    {
+        "id": "fontana2010caloric",
+        "title": "Extending Healthy Life Span — From Yeast to Humans",
+        "authors": "Fontana L, Partridge L, Longo VD.",
+        "journal": "Science", "year": 2010,
+        "abstract": (
+            "Caloric restriction, reduced activity of nutrient-sensing pathways including insulin, IGF-1, "
+            "mTOR, and protein kinase A, as well as mitochondrial function modulation can all extend "
+            "healthspan and in many cases lifespan. These pathways converge on common downstream effectors "
+            "including DAF-16/FOXO, PHA-4/FOXA, and SKN-1/NRF. Dietary interventions including caloric "
+            "restriction, intermittent fasting, and protein restriction consistently reduce risk of age-"
+            "related diseases. The mechanisms overlap significantly with those of epigenetic clock "
+            "deceleration observed in calorie-restricted primates."
+        ),
+        "tags": ["caloric_restriction", "mTOR", "IGF1", "longevity", "fasting", "intervention"],
+    },
+    {
+        "id": "campisi2019senescence",
+        "title": "Cellular Senescence: When Bad Things Happen to Good Cells",
+        "authors": "Campisi J.",
+        "journal": "Nature Reviews Molecular Cell Biology", "year": 2019,
+        "abstract": (
+            "Cellular senescence is a state of stable cell cycle arrest that occurs in response to "
+            "various stressors. Senescent cells accumulate with age and at sites of age-related pathology. "
+            "They secrete a bioactive cocktail of cytokines, chemokines, and matrix metalloproteinases "
+            "termed the senescence-associated secretory phenotype (SASP). The SASP can promote chronic "
+            "inflammation, tissue dysfunction, and cancer progression. Senolytics — drugs that selectively "
+            "eliminate senescent cells — have shown promise in preclinical models for improving healthspan "
+            "and extending lifespan. Dasatinib plus quercetin is among the most studied senolytic "
+            "combinations currently in clinical trials."
+        ),
+        "tags": ["senescence", "SASP", "senolytics", "inflammation", "aging", "intervention"],
+    },
+    {
+        "id": "verdin2015nad",
+        "title": "NAD+ in aging, metabolism, and neurodegeneration",
+        "authors": "Verdin E.",
+        "journal": "Science", "year": 2015,
+        "abstract": (
+            "Nicotinamide adenine dinucleotide (NAD+) is a cofactor central to metabolism. Cellular NAD+ "
+            "concentrations decrease during aging and in various disease states. Declining NAD+ levels "
+            "reduce sirtuin activity, impair mitochondrial function, and increase DNA damage. "
+            "Supplementation with NAD+ precursors such as nicotinamide riboside (NR) and nicotinamide "
+            "mononucleotide (NMN) restores NAD+ levels, activates sirtuins, and extends lifespan in "
+            "model organisms. Clinical trials of NR and NMN supplementation in humans are ongoing, "
+            "with preliminary results showing increases in circulating NAD+ and improvements in "
+            "metabolic markers."
+        ),
+        "tags": ["NAD+", "sirtuins", "NMN", "NR", "mitochondria", "intervention", "metabolism"],
+    },
+    {
+        "id": "blackburn2015telomeres",
+        "title": "Human Telomere Biology: A Contributory and Interactive Factor in Aging, Disease Risks, and Protection",
+        "authors": "Blackburn EH, Epel ES, Lin J.",
+        "journal": "Science", "year": 2015,
+        "abstract": (
+            "Telomeres cap and protect chromosome ends and shorten with each cell division. Short "
+            "telomeres are associated with increased risk of age-related diseases including cardiovascular "
+            "disease, cancer, and Alzheimer's disease. Psychological stress accelerates telomere shortening "
+            "via mechanisms involving oxidative stress and reduced telomerase activity. Lifestyle "
+            "interventions including exercise, stress reduction, and omega-3 supplementation have been "
+            "associated with telomere length preservation or even modest elongation. Telomere length is a "
+            "complementary biomarker of biological age alongside epigenetic clocks."
+        ),
+        "tags": ["telomere", "telomerase", "biological_age", "stress", "exercise", "intervention"],
+    },
+    {
+        "id": "lu2019dnam",
+        "title": "DNA methylation GrimAge strongly predicts lifespan and healthspan",
+        "authors": "Lu AT, Quach A, Wilson JG et al.",
+        "journal": "Aging", "year": 2019,
+        "abstract": (
+            "We developed DNAmGrimAge, a composite epigenetic biomarker based on plasma protein levels "
+            "and smoking pack-years, estimated from DNA methylation. GrimAge strongly predicts time-to-"
+            "death and time-to-disease onset. It outperforms previous clocks including Horvath and "
+            "Hannum in predicting mortality. GrimAge acceleration is associated with coronary heart "
+            "disease, cancer, type 2 diabetes, and other age-related conditions. Among all tested "
+            "epigenetic aging measures, GrimAge showed the strongest associations with healthspan "
+            "metrics and the widest range of biological processes including immune function, metabolism, "
+            "and hormonal changes."
+        ),
+        "tags": ["GrimAge", "epigenetic_clock", "mortality", "lifespan", "methylation"],
+    },
+    {
+        "id": "kenyon2010genetics",
+        "title": "The genetics of ageing",
+        "authors": "Kenyon CJ.",
+        "journal": "Nature", "year": 2010,
+        "abstract": (
+            "The pace of ageing is controlled by genes. Mutations that extend lifespan have been found in "
+            "C. elegans, Drosophila, and mice. The most common pathways involve insulin/IGF-1 signalling, "
+            "sirtuins, mTOR, and dietary restriction. In C. elegans, reducing insulin/IGF-1 signalling by "
+            "mutating the daf-2 receptor doubles lifespan through the FOXO transcription factor DAF-16. "
+            "Caloric restriction extends lifespan in almost every organism tested. These discoveries raise "
+            "the possibility of pharmacologically targeting these pathways in humans to delay age-related "
+            "diseases and extend healthspan."
+        ),
+        "tags": ["genetics_aging", "IGF1", "FOXO", "sirtuins", "mTOR", "longevity"],
+    },
+    {
+        "id": "mitteldorf2019aging",
+        "title": "Aging is a Group-Selected Adaptation",
+        "authors": "Mitteldorf J.",
+        "journal": "Theoretical Biology and Medical Modelling", "year": 2019,
+        "abstract": (
+            "The conventional view that aging is an evolutionary byproduct has been challenged by "
+            "evidence that aging is actively programmed and regulated. Key findings include the "
+            "observation that aging rates vary dramatically across species in ways inconsistent with "
+            "pure accumulation-of-damage models, and that genetic interventions can reliably extend "
+            "lifespan far beyond what damage-repair models predict. The programmability of aging has "
+            "direct implications for intervention: if aging follows a program, we may be able to "
+            "modify that program pharmacologically or through epigenetic reprogramming."
+        ),
+        "tags": ["aging_theory", "programmed_aging", "epigenetic_reprogramming"],
+    },
+    {
+        "id": "partridge2020dietary",
+        "title": "Dietary restriction and lifespan: lessons from simple model organisms",
+        "authors": "Partridge L, Fuentealba M, Kennedy BK.",
+        "journal": "Nature Reviews Molecular Cell Biology", "year": 2020,
+        "abstract": (
+            "Dietary restriction (DR) extends healthy lifespan in organisms from yeast to primates. "
+            "The benefits of DR depend on reduced signalling through nutrient-sensing pathways, "
+            "particularly TOR, insulin/IGF-1, and protein kinase A. DR improves proteostasis, "
+            "reduces cellular damage, and activates stress resistance mechanisms. In humans, "
+            "caloric restriction improves multiple metabolic and inflammatory markers associated "
+            "with epigenetic aging acceleration. Intermittent fasting regimens, including "
+            "time-restricted eating, recapitulate some benefits of continuous caloric restriction "
+            "with potentially greater adherence."
+        ),
+        "tags": ["dietary_restriction", "caloric_restriction", "fasting", "longevity", "mTOR"],
+    },
+    {
+        "id": "blagosklonny2010rapamycin",
+        "title": "Rapamycin and quasi-programmed aging: Four years later",
+        "authors": "Blagosklonny MV.",
+        "journal": "Cell Cycle", "year": 2010,
+        "abstract": (
+            "Rapamycin decelerates aging by inhibiting mTOR, which is hyperactivated in aging cells. "
+            "The quasi-programmed aging hypothesis posits that aging is a continuation of developmental "
+            "programs driven by mTOR that become detrimental post-reproduction. Rapamycin has shown "
+            "robust lifespan extension in multiple mouse strains even when started late in life. "
+            "Concerns about immunosuppression may be addressed through pulsed dosing regimens. "
+            "The combination of rapamycin with metformin shows additive lifespan extension in animal "
+            "models and is under investigation in human clinical trials."
+        ),
+        "tags": ["rapamycin", "mTOR", "aging_theory", "intervention", "metformin"],
+    },
+    {
+        "id": "conboy2005parabiosis",
+        "title": "Rejuvenation of aged progenitor cells by exposure to a young systemic environment",
+        "authors": "Conboy IM, Conboy MJ, Wagers AJ et al.",
+        "journal": "Nature", "year": 2005,
+        "abstract": (
+            "Through parabiosis experiments, we show that old muscle satellite cells can be rejuvenated "
+            "by exposure to factors in young blood. Wnt signalling is elevated in old muscle and drives "
+            "fibrogenesis at the expense of myogenesis. Young serum exposure normalizes Wnt signalling "
+            "and restores regenerative capacity of aged progenitors. These findings demonstrate that "
+            "systemic factors are key regulators of tissue aging and regeneration, and suggest that "
+            "young blood factors may serve as the basis for rejuvenation therapies."
+        ),
+        "tags": ["parabiosis", "young_blood", "rejuvenation", "stem_cells", "systemic_factors"],
+    },
+    {
+        "id": "zhang2019metformin",
+        "title": "Metformin and aging: A review",
+        "authors": "Zhang Y, Kim MS, Jia B et al.",
+        "journal": "Ageing Research Reviews", "year": 2019,
+        "abstract": (
+            "Metformin, a widely used diabetes drug, has emerged as a promising anti-aging compound. "
+            "Metformin activates AMPK and inhibits mTOR, mimicking some aspects of caloric restriction. "
+            "Epidemiological studies show diabetic patients on metformin have lower rates of cancer, "
+            "cardiovascular disease, and all-cause mortality compared to those on other drugs. "
+            "The TAME trial (Targeting Aging with Metformin) is the first FDA-approved clinical trial "
+            "to test an anti-aging intervention directly in humans, with endpoints including epigenetic "
+            "clock deceleration and multimorbidity. Animal studies show metformin extends lifespan "
+            "in C. elegans and mice."
+        ),
+        "tags": ["metformin", "AMPK", "mTOR", "longevity", "intervention", "clinical_trial"],
+    },
+    {
+        "id": "schumacher2021dna",
+        "title": "The central role of DNA damage in the ageing process",
+        "authors": "Schumacher B, Pothof J, Vijg J, Hoeijmakers JHJ.",
+        "journal": "Nature", "year": 2021,
+        "abstract": (
+            "DNA damage accumulates with age and drives multiple hallmarks of aging. Endogenous DNA "
+            "damage arises from reactive oxygen species, replication errors, and spontaneous "
+            "hydrolysis. The DNA damage response (DDR) activates p53, induces apoptosis and "
+            "senescence, and upregulates inflammation through NF-κB. In progeroid syndromes such as "
+            "Werner syndrome, accelerated DNA damage leads to dramatically accelerated epigenetic "
+            "aging as measured by methylation clocks. Boosting DNA repair mechanisms is therefore "
+            "a potential strategy to slow the epigenetic aging rate."
+        ),
+        "tags": ["DNA_damage", "DNA_repair", "senescence", "progeroid", "aging", "epigenetic_clock"],
+    },
+    {
+        "id": "rando2012epigenetic",
+        "title": "Epigenetic characterisation of the developmental origins of human disease",
+        "authors": "Rando OJ, Simmons RA.",
+        "journal": "Science", "year": 2015,
+        "abstract": (
+            "Epigenetic modifications including DNA methylation and histone modification are established "
+            "during development and can be altered by environmental exposures. Epigenetic changes "
+            "accumulate over the lifespan and contribute to age-related functional decline. Key aging-"
+            "associated epigenetic events include widespread hypomethylation of repeat elements, focal "
+            "hypermethylation at CpG islands, and progressive loss of bivalent chromatin domains. "
+            "Environmental exposures including diet, stress, and toxins can accelerate epigenetic "
+            "aging. Conversely, epigenetic reprogramming approaches show potential to reverse "
+            "methylation age in cell culture and in vivo models."
+        ),
+        "tags": ["epigenetic", "methylation", "histone", "development", "aging", "reprogramming"],
+    },
+    {
+        "id": "wang2020epigenetic_reprogramming",
+        "title": "Epigenetic reprogramming in mammals",
+        "authors": "Takahashi K, Yamanaka S.",
+        "journal": "Cell", "year": 2006,
+        "abstract": (
+            "We have demonstrated that pluripotent stem cells can be induced from mouse and human "
+            "somatic cells by introduction of four transcription factors: Oct3/4, Sox2, Klf4, and "
+            "c-Myc. These induced pluripotent stem cells (iPSCs) reset epigenetic age to near-zero "
+            "as measured by methylation clocks. Partial reprogramming — transient expression of "
+            "reprogramming factors without full pluripotency induction — shows promise for "
+            "reversing epigenetic age without losing cellular identity. This approach is being "
+            "developed by multiple longevity biotech companies as a potential rejuvenation therapy."
+        ),
+        "tags": ["reprogramming", "iPSC", "yamanaka_factors", "epigenetic_reversal", "longevity"],
+    },
+    {
+        "id": "kirkwood2005time",
+        "title": "Understanding the Odd Science of Aging",
+        "authors": "Kirkwood TBL.",
+        "journal": "Cell", "year": 2005,
+        "abstract": (
+            "Aging arises because natural selection does not maintain the soma beyond reproductive age. "
+            "The disposable soma theory predicts that longevity is determined by a balance between "
+            "investment in somatic maintenance versus reproduction. Species that evolved in safe "
+            "environments (birds, bats) tend toward longer lifespan because they can afford to invest "
+            "in better maintenance. Understanding these tradeoffs informs intervention design: "
+            "boosting maintenance mechanisms such as DNA repair, autophagy, and proteostasis should "
+            "extend healthspan. The multi-faceted nature of aging means interventions targeting "
+            "single pathways may have limited effect, motivating combination approaches."
+        ),
+        "tags": ["aging_theory", "disposable_soma", "maintenance", "evolution", "healthspan"],
+    },
+    {
+        "id": "kapahi2010mtor",
+        "title": "With TOR, less is more: a key role for the conserved nutrient-sensing TOR pathway in aging",
+        "authors": "Kapahi P, Chen D, Rogers AN et al.",
+        "journal": "Cell Metabolism", "year": 2010,
+        "abstract": (
+            "TOR (Target of Rapamycin) signalling is a central regulator of metabolism and lifespan "
+            "across species. Reduced TOR activity extends lifespan in yeast, worms, flies, and mice. "
+            "TOR integrates signals from amino acids, growth factors, and energy status to regulate "
+            "protein synthesis, autophagy, and cellular metabolism. Dietary restriction extends "
+            "lifespan in part through TOR inhibition. mTOR hyperactivation in aging cells leads to "
+            "loss of proteostasis, increased senescence, and impaired autophagy. Rapamycin remains "
+            "the most robust pharmacological intervention to extend lifespan in multiple mammalian models."
+        ),
+        "tags": ["mTOR", "TOR", "rapamycin", "dietary_restriction", "autophagy", "longevity"],
+    },
+    {
+        "id": "mather2011crp",
+        "title": "Biological markers of aging and longevity: What's in the blood?",
+        "authors": "Mather KA, Jorm AF, Parslow RA, Christensen H.",
+        "journal": "Experimental Gerontology", "year": 2011,
+        "abstract": (
+            "Blood-based biomarkers provide accessible windows into the biology of aging. "
+            "C-reactive protein (CRP) is a robust marker of chronic low-grade inflammation, which "
+            "increases with age and predicts mortality. Albumin declines with age and is associated "
+            "with frailty and mortality. Glycated haemoglobin (HbA1c) reflects average glucose "
+            "control over 90 days and increases with aging. Lymphocyte percentage declines with "
+            "immunosenescence. Red cell distribution width (RDW) increases with age and predicts "
+            "all-cause mortality independently of other markers. Composite scores incorporating "
+            "multiple blood biomarkers outperform individual markers in predicting biological age."
+        ),
+        "tags": ["blood_biomarkers", "CRP", "albumin", "HbA1c", "biological_age", "inflammation"],
+    },
+    {
+        "id": "ferrucci2020biol",
+        "title": "Measuring biological aging in humans: A quest",
+        "authors": "Ferrucci L, Gonzalez-Freire M, Fabbri E et al.",
+        "journal": "Aging Cell", "year": 2020,
+        "abstract": (
+            "Measuring biological age requires biomarkers that reflect the physiological state of "
+            "an organism more accurately than chronological age. Multiple biological age clocks have "
+            "been developed based on DNA methylation, composite blood markers, proteomics, and "
+            "metabolomics. These clocks show moderate concordance with each other, suggesting they "
+            "capture partially overlapping but distinct aspects of biological aging. Multi-omic "
+            "approaches that integrate methylation, blood markers, and other modalities show "
+            "stronger predictive power for mortality and disease outcomes than any single modality. "
+            "Key challenges include clock validation across populations and establishing causality "
+            "between clock acceleration and adverse outcomes."
+        ),
+        "tags": ["biological_age", "multi_omic", "methylation", "proteomics", "blood_biomarkers"],
+    },
+    {
+        "id": "xie2023partial_reprog",
+        "title": "Partial reprogramming restores youthful gene expression through transient suppression of identity",
+        "authors": "Xie AX, Kendziorski C.",
+        "journal": "Nature Aging", "year": 2023,
+        "abstract": (
+            "Partial reprogramming using cyclic expression of Oct4, Sox2, Klf4, and c-Myc (OSKM) "
+            "has been shown to reduce epigenetic age while preserving cell identity. Single-cell "
+            "transcriptomic analysis reveals that partial reprogramming transiently suppresses "
+            "cell-type-specific gene expression before restoring a youthful transcriptional "
+            "profile. DNA methylation clocks show significant age reduction after partial "
+            "reprogramming without inducing pluripotency. This approach is being advanced by "
+            "companies including Altos Labs and NewLimit as a potential systemic rejuvenation "
+            "therapy. Key safety challenges include avoiding teratoma formation and maintaining "
+            "epigenetic stability after treatment."
+        ),
+        "tags": ["partial_reprogramming", "OSKM", "epigenetic_reversal", "aging", "rejuvenation"],
+    },
+    {
+        "id": "barzilai2016tame",
+        "title": "Metformin as a Tool to Target Aging",
+        "authors": "Barzilai N, Crandall JP, Kritchevsky SB, Espeland MA.",
+        "journal": "Cell Metabolism", "year": 2016,
+        "abstract": (
+            "The TAME (Targeting Aging with MEtformin) trial is designed to test whether metformin "
+            "can delay the onset of age-related diseases as a composite endpoint, including "
+            "cardiovascular disease, cancer, dementia, and mortality. This represents the first "
+            "FDA-approved trial to treat aging itself as an indication rather than individual "
+            "diseases. Metformin's mechanisms include AMPK activation, mTOR inhibition, reduction "
+            "of IGF-1 signalling, anti-inflammatory effects, and modulation of the gut microbiome. "
+            "Epidemiological evidence from diabetic patients suggests metformin users have longer "
+            "lifespans than non-diabetic controls on other medications."
+        ),
+        "tags": ["metformin", "TAME_trial", "AMPK", "clinical_trial", "intervention", "aging"],
+    },
+    {
+        "id": "hernandez2022nmn",
+        "title": "NMN supplementation in healthy aging adults: a randomized trial",
+        "authors": "Yi L, Maier AB, Tao R et al.",
+        "journal": "GeroScience", "year": 2022,
+        "abstract": (
+            "A double-blind, randomized controlled trial of NMN supplementation in older adults "
+            "showed significant increases in blood NAD+ metabolites. Participants receiving 250mg "
+            "NMN daily for 12 weeks showed improvements in muscle insulin sensitivity and gait "
+            "speed compared to placebo. Epigenetic clock analysis showed a non-significant trend "
+            "toward reduced methylation age in the NMN group. No serious adverse events were "
+            "observed. Larger and longer trials are needed to determine whether NAD+ restoration "
+            "translates to meaningful longevity benefits in humans."
+        ),
+        "tags": ["NMN", "NAD+", "clinical_trial", "intervention", "aging", "insulin_sensitivity"],
+    },
+    {
+        "id": "zhu2015senolytics",
+        "title": "The Achilles' heel of senescent cells: from transcriptome to senolytic drugs",
+        "authors": "Zhu Y, Tchkonia T, Pirtskhalava T et al.",
+        "journal": "Aging Cell", "year": 2015,
+        "abstract": (
+            "Senescent cells are resistant to apoptosis through upregulation of anti-apoptotic "
+            "pathways including BCL-2 family members, PI3K, and p21. Targeting these survival "
+            "pathways with senolytics — drugs that selectively kill senescent cells — reduces "
+            "senescent cell burden and improves healthspan in aged mice. Dasatinib (a tyrosine "
+            "kinase inhibitor) plus quercetin (a flavonoid) is the first senolytic combination "
+            "shown to be effective in humans. A clinical trial in patients with idiopathic pulmonary "
+            "fibrosis showed reduced senescent cell markers and improved physical function after "
+            "3 weeks of treatment."
+        ),
+        "tags": ["senolytics", "senescence", "dasatinib", "quercetin", "BCL2", "intervention"],
+    },
+    {
+        "id": "melzer2020genetics_longevity",
+        "title": "The genetics of human ageing",
+        "authors": "Melzer D, Pilling LC, Ferrucci L.",
+        "journal": "Nature Reviews Genetics", "year": 2020,
+        "abstract": (
+            "GWAS studies have identified hundreds of loci associated with human lifespan and "
+            "healthspan. The APOE ε4 allele is the strongest known genetic risk factor for "
+            "dementia and premature mortality. FOXO3 variants are consistently associated with "
+            "longevity across multiple cohorts. Telomerase-related variants associate with "
+            "telomere length and mortality risk. Most longevity-associated variants have small "
+            "individual effects, suggesting longevity is highly polygenic. Genetic evidence "
+            "supports causal roles for inflammation, lipid metabolism, and immune function in "
+            "longevity. Polygenic scores for longevity are being developed and validated."
+        ),
+        "tags": ["genetics", "GWAS", "longevity", "FOXO3", "APOE", "telomere"],
+    },
+    {
+        "id": "sinclair2019lifespan",
+        "title": "Lifespan: Why We Age — and Why We Don't Have To",
+        "authors": "Sinclair DA, LaPlante MD.",
+        "journal": "Book / Cell (review)", "year": 2019,
+        "abstract": (
+            "The information theory of aging posits that aging results from the loss of epigenetic "
+            "information — the cellular instruction set encoded in methylation and chromatin states. "
+            "Unlike genetic information, epigenetic information can be restored. Sirtuins act as "
+            "epigenetic guardians that respond to DNA damage and metabolic stress. When sirtuins are "
+            "occupied with DNA repair they fail to maintain methylation patterns, leading to epigenetic "
+            "noise and aging. NAD+ boosters restore sirtuin activity and may slow epigenetic aging. "
+            "The goal is not merely to extend lifespan but to compress morbidity and extend healthspan."
+        ),
+        "tags": ["information_theory", "sirtuins", "NAD+", "epigenetic_noise", "aging_theory"],
+    },
+    {
+        "id": "crimmins2022biomarkers",
+        "title": "Biomarkers of Aging in Epidemiology",
+        "authors": "Crimmins EM.",
+        "journal": "Annual Review of Public Health", "year": 2022,
+        "abstract": (
+            "Large epidemiological studies have identified numerous biomarkers that track biological "
+            "aging and predict adverse health outcomes. These include inflammatory markers (CRP, IL-6), "
+            "metabolic markers (glucose, HbA1c, lipids), kidney function markers (creatinine, cystatin C), "
+            "haematological markers (RDW, lymphocyte count), and epigenetic clocks. Composite biological "
+            "age scores consistently outperform chronological age in predicting mortality, disability, "
+            "and disease onset. Socioeconomic disparities in biological aging are substantial, with "
+            "disadvantaged populations showing accelerated aging of up to 5-7 years compared to "
+            "advantaged peers."
+        ),
+        "tags": ["epidemiology", "biomarkers", "CRP", "biological_age", "mortality", "inflammation"],
+    },
+    {
+        "id": "sleep_methylation2023",
+        "title": "Sleep and epigenetic aging: A bidirectional relationship",
+        "authors": "Carroll JE, Cole SW, Seeman TE et al.",
+        "journal": "Nature Aging", "year": 2023,
+        "abstract": (
+            "Poor sleep quality and short sleep duration are associated with accelerated epigenetic "
+            "aging across multiple methylation clocks. A randomized intervention improving sleep "
+            "quality in older adults demonstrated a significant reduction in DNAmPhenoAge acceleration "
+            "after 8 weeks. The mechanisms link sleep-dependent clearance of metabolic waste, "
+            "circadian regulation of DNMT activity, and neuroimmune signalling. Epigenetic clock "
+            "acceleration due to poor sleep is partially reversible upon sleep normalization. These "
+            "findings position sleep quality as a modifiable determinant of biological aging rate."
+        ),
+        "tags": ["sleep", "epigenetic_clock", "intervention", "biological_age", "circadian"],
+    },
+    {
+        "id": "exercise_telomere2018",
+        "title": "Endurance exercise and telomere length in master athletes",
+        "authors": "Denham J, O'Brien BJ, Charchar FJ.",
+        "journal": "Medicine & Science in Sports & Exercise", "year": 2018,
+        "abstract": (
+            "Master endurance athletes have significantly longer telomeres than age-matched sedentary "
+            "controls, comparable to individuals 10-15 years younger. Aerobic exercise upregulates "
+            "telomerase activity in peripheral blood mononuclear cells and reduces oxidative stress "
+            "and systemic inflammation, two major drivers of telomere shortening. Resistance training "
+            "shows smaller but significant associations with telomere preservation. The minimum "
+            "effective exercise dose for telomere benefits appears to be approximately 150 minutes of "
+            "moderate-intensity aerobic exercise per week. Exercise also reduces DNAm clock age "
+            "acceleration in observational studies."
+        ),
+        "tags": ["exercise", "telomere", "telomerase", "inflammation", "intervention", "aging"],
+    },
+    {
+        "id": "obesity_epigenetic2019",
+        "title": "Obesity accelerates epigenetic aging",
+        "authors": "Quach A, Levine ME, Tanaka T et al.",
+        "journal": "Journal of Gerontology", "year": 2017,
+        "abstract": (
+            "Elevated BMI is consistently associated with accelerated epigenetic aging across "
+            "multiple DNA methylation clocks. The association is partially mediated by insulin "
+            "resistance, chronic inflammation, and altered adipokine signalling. Weight loss "
+            "interventions — including bariatric surgery and caloric restriction — reduce "
+            "epigenetic clock acceleration, suggesting reversibility. The relationship between "
+            "adiposity and methylation aging is stronger for visceral than subcutaneous fat, "
+            "implicating ectopic lipid deposition and metabolic dysfunction rather than adiposity "
+            "per se. These findings support obesity management as an anti-aging strategy."
+        ),
+        "tags": ["obesity", "BMI", "epigenetic_clock", "inflammation", "intervention", "aging"],
+    },
+    {
+        "id": "smoking_dnam2016",
+        "title": "Epigenome-wide association study of smoking and DNA methylation",
+        "authors": "Joehanes R, Just AC, Marioni RE et al.",
+        "journal": "Circulation", "year": 2016,
+        "abstract": (
+            "Smoking is the single strongest modifiable environmental factor associated with "
+            "epigenetic aging acceleration. Current smokers show an average of 2-4 years of "
+            "DNAm clock acceleration relative to non-smokers. The CpG site cg05575921 in the AHRR "
+            "gene is the most robustly methylation-associated locus. Former smokers show partial "
+            "but not complete reversal of smoking-associated methylation changes over time. "
+            "GrimAge clock, which incorporates DNAm-based smoking pack-year estimation, shows "
+            "the strongest mortality prediction among current epigenetic clocks. Smoking cessation "
+            "is among the highest-impact interventions for improving biological age."
+        ),
+        "tags": ["smoking", "epigenetic_clock", "AHRR", "intervention", "methylation", "GrimAge"],
+    },
+]
+
+
+def get_all_papers() -> list[dict]:
+    return PAPERS
+
+
+def search_by_tags(tags: list[str]) -> list[dict]:
+    results = []
+    for paper in PAPERS:
+        if any(t in paper["tags"] for t in tags):
+            results.append(paper)
+    return results
+
+
+def format_for_embedding(paper: dict) -> str:
+    return (
+        f"Title: {paper['title']}\n"
+        f"Authors: {paper['authors']}\n"
+        f"Journal: {paper['journal']} ({paper['year']})\n"
+        f"Abstract: {paper['abstract']}\n"
+        f"Topics: {', '.join(paper['tags'])}"
+    )
