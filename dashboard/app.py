@@ -11,6 +11,9 @@ import numpy as np
 import plotly.graph_objects as go
 import plotly.express as px
 import sys, os
+import torch
+import joblib
+
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from models.blood_biomarker_model import BloodBiomarkerModel
 
@@ -549,7 +552,17 @@ if not run:
 @st.cache_resource
 def load_model():
     model = BloodBiomarkerModel()
-    model.load("models/saved/blood_mlp.pt", "models/saved/blood_scaler.pkl")
+
+    # Load weights manually
+    model.model.load_state_dict(
+        torch.load("models/saved/blood_mlp.pt", map_location="cpu")
+    )
+
+    # Load scaler
+    model.scaler = joblib.load("models/saved/blood_scaler.pkl")
+
+    model.model.eval()
+
     return model
 
 blood_model = load_model()
