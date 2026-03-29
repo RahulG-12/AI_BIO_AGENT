@@ -2,7 +2,7 @@
 
 **Multi-modal epigenetic aging platform** — implements the Hannum 2013 clock from scratch, fuses it with a blood biomarker MLP, and wraps both in an agentic system with RAG over longevity research literature.
 
-Built as a demonstration of research-to-production ML engineering, directly relevant to Immortigen's Digital Twin of the Human Body mission.
+Built as a demonstration of research-to-production ML engineering, directly relevant to bio-Age AI's Digital Twin of the Human Body mission.
 
 ---
 

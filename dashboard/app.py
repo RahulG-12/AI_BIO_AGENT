@@ -494,7 +494,7 @@ with st.sidebar:
     <div class="sidebar-brand">
         <div class="sidebar-brand-icon">🧬</div>
         <div>
-            <div class="sidebar-brand-name">Immortigen</div>
+            <div class="sidebar-brand-name">bio-Age AI</div>
             <div class="sidebar-brand-tag">BioAge Intelligence</div>
         </div>
     </div>
@@ -529,7 +529,7 @@ with st.sidebar:
 
 # ── PAGE HEADER ────────────────────────────────────────────
 st.markdown("""
-<div class="page-eyebrow">Immortigen · Longevity Science Platform</div>
+<div class="page-eyebrow">bio-Age AI · Longevity Science Platform</div>
 <div class="page-title">Biological Age <span>Intelligence</span></div>
 <div class="page-subtitle">Multi-modal aging biomarker analysis · Epigenetic + blood-based composite scoring</div>
 <div class="divider"></div>
@@ -866,7 +866,7 @@ st.markdown(f"""
     box-shadow:var(--shadow-sm);
 ">
     <div style="font-family:'Cormorant Garamond',serif; font-size:1.4rem; font-weight:600; color:var(--ink);">
-        Immortigen
+        bio-Age AI
         <span style="font-family:'DM Sans',sans-serif; font-size:0.72rem; font-weight:500; color:var(--ink-faint); margin-left:8px; letter-spacing:0.08em;">
             LONGEVITY SCIENCE PLATFORM
         </span>

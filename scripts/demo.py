@@ -25,7 +25,7 @@ def separator(title):
 def main():
     print("=" * 60)
     print("  BIOLOGICAL AGE AGENT — OFFLINE DEMO")
-    print("  Immortigen ML Research Engineer Candidate Project")
+    print("  bio-Age AI ML Research Engineer Candidate Project")
     print("=" * 60)
 
     # ── 1. Generate data ───────────────────────────────────────────

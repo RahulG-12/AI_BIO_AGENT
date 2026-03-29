@@ -19,7 +19,7 @@ load_dotenv()
 from agent.tools import TOOL_DEFINITIONS, TOOL_FUNCTIONS
 from rag.retriever import LongevityRetriever
 
-SYSTEM_PROMPT = """You are a Biological Age Analysis Agent built for Immortigen, a longevity biotech
+SYSTEM_PROMPT = """You are a Biological Age Analysis Agent built for bio-Age AI, a longevity biotech
 company building the Digital Twin of the Human Body.
 
 Your role: analyse a subject's biological age data and produce a comprehensive,
