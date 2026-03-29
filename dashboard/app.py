@@ -11,9 +11,9 @@ import numpy as np
 import plotly.graph_objects as go
 import plotly.express as px
 import sys, os
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from models.blood_biomarker_model import BloodBiomarkerModel
 
-sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 st.set_page_config(
     page_title="Biological Age Agent — Immortigen",
