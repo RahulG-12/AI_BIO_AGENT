@@ -549,19 +549,19 @@ if not run:
     st.stop()
 
 # ── COMPUTATION ──────────────────────────────────────────────
+
 @st.cache_resource
 def load_model():
     model = BloodBiomarkerModel()
 
-    # Load weights manually
-    model.model.load_state_dict(
+    # 🔥 FIX: use correct attribute name
+    model.net.load_state_dict(
         torch.load("models/saved/blood_mlp.pt", map_location="cpu")
     )
 
-    # Load scaler
     model.scaler = joblib.load("models/saved/blood_scaler.pkl")
 
-    model.model.eval()
+    model.net.eval()
 
     return model
 
