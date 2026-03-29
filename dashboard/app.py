@@ -549,7 +549,7 @@ if not run:
 @st.cache_resource
 def load_model():
     model = BloodBiomarkerModel()
-    model.load("models/saved/blood_mlp.pt")
+    model.load("models/saved/blood_mlp.pt", "models/saved/blood_scaler.pkl")
     return model
 
 blood_model = load_model()
