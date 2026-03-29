@@ -11,12 +11,8 @@ import numpy as np
 import plotly.graph_objects as go
 import plotly.express as px
 import sys, os
-import torch
-import joblib
 
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-from models.blood_biomarker_model import BloodBiomarkerModel
-
 
 st.set_page_config(
     page_title="Biological Age Agent — Immortigen",
@@ -78,7 +74,7 @@ html, body, [data-testid="stAppViewContainer"] {
 
 /* ── SIDEBAR ── */
 [data-testid="stSidebar"] {
-    bac0kground: var(--warm-white) !important;
+    background: var(--warm-white) !important;
     border-right: 1px solid var(--border) !important;
     box-shadow: 4px 0 24px rgba(13,13,13,0.04) !important;
 }
@@ -546,40 +542,24 @@ if not run:
         <span>Enter subject biomarkers in the left panel and click <strong>Run Biological Analysis</strong> to generate a comprehensive aging profile.</span>
     </div>
     """, unsafe_allow_html=True)
-
+    st.stop()
 
 # ── COMPUTATION ──────────────────────────────────────────────
+def estimate_blood_age(bm, age):
+    score = 0
+    if bm["crp"] > 3:       score += (bm["crp"] - 3) * 1.5
+    if bm["glucose"] > 95:  score += (bm["glucose"] - 95) * 0.2
+    if bm["hdl"] < 50:      score += (50 - bm["hdl"]) * 0.15
+    if bm["hba1c"] > 5.4:   score += (bm["hba1c"] - 5.4) * 4
+    if bm["albumin"] < 4:   score += (4 - bm["albumin"]) * 3
+    if bm["rdw"] > 14:      score += (bm["rdw"] - 14) * 2
+    if bm["telomere"] < 1:  score += (1 - bm["telomere"]) * 5
+    return age + score
 
-@st.cache_resource
-def load_model():
-    model = BloodBiomarkerModel()
+bm = {"crp": crp, "glucose": glucose, "hdl": hdl, "hba1c": hba1c,
+      "albumin": albumin, "rdw": rdw, "telomere": telomere}
 
-    # 🔥 FIX: use correct attribute name
-    model.net.load_state_dict(
-        torch.load("models/saved/blood_mlp.pt", map_location="cpu")
-    )
-
-    model.scaler = joblib.load("models/saved/blood_scaler.pkl")
-
-    model.net.eval()
-
-    return model
-
-blood_model = load_model()
-
-# Correct format for ML model
-bm_model = {
-    "crp_mg_l": crp,
-    "glucose_mg_dl": glucose,
-    "hdl_mg_dl": hdl,
-    "hba1c_pct": hba1c,
-    "albumin_g_dl": albumin,
-    "rdw_pct": rdw,
-    "telomere_score": telomere
-}
-
-# REAL prediction
-blood_age = float(blood_model.predict(bm_model))
+blood_age      = estimate_blood_age(bm, chron_age)
 composite_age  = round((methylation_age * 0.55 + blood_age * 0.45), 1)
 aai            = composite_age - chron_age
 
