@@ -546,7 +546,7 @@ if not run:
         <span>Enter subject biomarkers in the left panel and click <strong>Run Biological Analysis</strong> to generate a comprehensive aging profile.</span>
     </div>
     """, unsafe_allow_html=True)
-    st.stop()
+
 
 # ── COMPUTATION ──────────────────────────────────────────────
 
